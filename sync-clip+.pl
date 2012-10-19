@@ -16,7 +16,7 @@ use File::Basename;
 # TODO: get this, "music_directory" and "playlist_directory" (.mpd/mpd.conf)
 my $musicHome = $ENV{HOME} . "/music";
 my $playlistFolder = $ENV{HOME} . "/.mpd/playlists";
-my $targetFolder = "/run/media/gl/5495-A68E/MUSIC";
+my $targetFolder = "/mnt/clip/MUSIC";
 
 sub parsePlaylist { # {{{1
     my @files;
