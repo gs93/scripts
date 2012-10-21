@@ -3,7 +3,7 @@ prefix="[zsh-cache]"
 echo -n "$prefix refresh..."
 
 # change dir
-cd $XDG_CACHE_HOME/zsh/complete
+cd $HOME/.cache/zsh/complete
 
 # delete old stuff
 rm *
