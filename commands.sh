@@ -76,7 +76,7 @@ case $1 in
     # 1}}}
     autostart) # {{{1
         pulseaudio --start
-        (urxvtd && urxvtc) &
+        (urxvtd -f && urxvtc) &
         mpd &
         (sleep 5s && dropboxd) &
         #pidgin --nologin &
