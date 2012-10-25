@@ -82,7 +82,7 @@ case $1 in
         #pidgin --nologin &
         claws-mail &
         xset s 0 0 &
-        encfs "$HOME/documents/Dropbox/bla" "$HOME/documents/box" --extpass="$(dirname $0)/.pw-dropbox"
+        encfs "$HOME/documents/Dropbox/bla" "$HOME/documents/box" --extpass="$HOME/.pw-dropbox"
         nm-applet &
         ;; # 1}}}
     shutdown) # {{{1
