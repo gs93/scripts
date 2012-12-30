@@ -6,19 +6,13 @@ echo -n "$prefix refresh..."
 cd $HOME/.cache/zsh/complete
 
 # delete old stuff
-rm *
+rm pac{in,rep{,s},rm,loc{,s},list}
 
 # all pkgs
 pacman -Ssq >pac{in,rep{,s}}
 
 # installed pks
-pacman -Qq >pac{rm,loc{,s},tree,list}
-
-# man pages
-apropos . --long | awk '{print $1}' >man
-
-# ssh hosts
-grep "^Host " $HOME/.ssh/config | awk '{print $2}' >{ssh,scp}
+pacman -Qq >pac{rm,loc{,s},list}
 
 # end
 echo -e "\r$prefix refresh done"
