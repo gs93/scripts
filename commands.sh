@@ -64,7 +64,7 @@ case $1 in
     terminal)
         urxvtc &;;
     browser)
-        firefox &;;
+        $BROWSER &;;
     mail)
         claws-mail &;;
     calculator)
