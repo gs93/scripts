@@ -77,16 +77,23 @@ sub parseOpts { # {{{1
         print "playlists      : @playlistsToSync (" . scalar(@playlistsToSync) . ")\n";
         print "targetFolder   : $targetFolder\n";
         print "dryrun         : $dryrun\n";
+        print "\n";
     }
+} # 1}}}
+
+sub getReadableSize { # {{{1
+    # XXX: dynamic
+    return sprintf("%.1f MB", $_[0] / 1024 / 1024);
 } # 1}}}
 
 sub main { # {{{1
     parseOpts();
     if (! -d $targetFolder) {
-        print STDERR "$targetFolder doesn't exist!";
+        print STDERR "$targetFolder doesn't exist!\n";
         exit 1;
     }
 
+    my $totalSize = 0;
     # XXX: support for playlist which aren't in the playlistFolder
     foreach (getPlaylists($playlistFolder)) {
         next unless ($_ =~ m/\.m3u$/);
@@ -94,7 +101,8 @@ sub main { # {{{1
             my $tmp = $_;
             next unless (grep(/^$tmp$/, @playlistsToSync));
         }
-        print "sync $_\n";
+        print "sync $_";
+        my $playlistSize = 0;
 
         open M3U, ">$targetFolder/$_" if (!$dryrun);
         my @files = parsePlaylist("$playlistFolder/$_");
@@ -112,17 +120,24 @@ sub main { # {{{1
             # TODO: delete files which aren't in a playlist
 
             # copy and write playlist
+            my $musicFile = "$musicHome/$_";
             if (!$dryrun) {
-                system("cp -up -- \"$musicHome/$_\" \"$targetFolder/$trgName\""); # no perl function for this -.-
+                system("cp -up -- \"$musicFile\" \"$targetFolder/$trgName\""); # no perl function for this -.-
                 print M3U "$trgName\n";
             }
 
             if ($verbose >= 2) {
                 print "copy \"$musicHome/$_\" to \"$targetFolder/$trgName\"\n";
             }
+
+            $playlistSize += (-s $musicFile);
+
         }
+        $totalSize += $playlistSize;
+        print " (size: " . getReadableSize($playlistSize) . ")\n";
         close(M3U);
     }
+    print " -- total size: " . getReadableSize($totalSize) . "\n" if ($verbose >= 1);
 } # 1}}}
 
 main();
