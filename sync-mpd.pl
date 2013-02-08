@@ -122,7 +122,7 @@ sub main { # {{{1
             # copy and write playlist
             my $musicFile = "$musicHome/$_";
             if (!$dryrun) {
-                system("cp -up -- \"$musicFile\" \"$targetFolder/$trgName\""); # no perl function for this -.-
+                system("cp -u  --preserve=mode,timestamps -- \"$musicFile\" \"$targetFolder/$trgName\""); # no perl function for this -.-
                 print M3U "$trgName\n";
             }
 
