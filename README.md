@@ -13,7 +13,7 @@ Simple pidgin plugin to add the `/np` command.
 
 sah (simple aur helper)
 -----------------------
-Search for updates (for packages from the [AUR](https://aur.archlinux.org/)) and write package names (and version numbers) in {{{$XDG_CACHE_HOME/sah}}}.
+Search for updates (for packages from the [AUR](https://aur.archlinux.org/)) and write package names (and version numbers) in `${XDG_CACHE_HOME:~/.cache}/sah`.
 
 sync-mpd
 --------
