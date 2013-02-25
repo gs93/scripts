@@ -11,6 +11,10 @@ nowplaying
 -----------
 Simple pidgin plugin to add the `/np` command.
 
+rdiff-backup.sh
+---------------
+Simple wrapper script for `rdiff-backup`. Able to backup multiple folders with different include/exclude options and automatic cleanup.
+
 sah (simple aur helper)
 -----------------------
 Search for updates (for packages from the [AUR](https://aur.archlinux.org/)) and write package names (and version numbers) in `${XDG_CACHE_HOME:~/.cache}/sah`.
