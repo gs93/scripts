@@ -25,10 +25,10 @@ case $1 in
         ;;
     # 1}}}
     lock) # {{{1
-        set -o monitor # for job control
         # locking {{{2
         xset dpms force off & # turn off screen
-        slock & # lock screen
+        slock & slockpid=$! # lock screen
+
         # pause mpd play and save status
         if [ "$(mpc status | head -2 | tail -1 | awk '{print $1}')" = "[playing]" ]; then # [playing]
             mpc -q pause # pause music
@@ -42,7 +42,9 @@ case $1 in
             purple-remote setstatus?status=unavailable
         fi
         # 2}}}
-        fg >/dev/null 2>&1 # wait for the end of slock
+
+        wait $slockpid
+
         # unlocking {{{2
         xset s 0 0 # turn screen never off
         # restore mpd status
