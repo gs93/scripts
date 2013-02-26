@@ -38,19 +38,14 @@ case $1 in
 
         # change pidgin status
         stat=$(purple-remote getstatus);
-        if [ "$stat" !=  "offline" ] && [ "$stat" != "invisible" ]; then
-            purple-remote setstatus?status=unavailable
-        fi
+        [[ "$stat" !=  "offline" ]] && [[ "$stat" != "invisible" ]] && purple-remote setstatus?status=unavailable;
         # 2}}}
 
         wait $slockpid
 
         # unlocking {{{2
         xset s 0 0 # turn screen never off
-        # restore mpd status
-        if [ $mpdplaying ]; then
-            mpc -q play
-        fi
+        [[ $mpdplaying ]] && mpc -q play; # restore mpd status
         purple-remote setstatus?status=$stat #&message=$msg # restore pidgin status
         # 2}}}
         ;; # 1}}}
