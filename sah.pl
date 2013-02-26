@@ -1,11 +1,8 @@
 #!/usr/bin/perl
 # Name        : sah (simple aur helper)
 # Version     : 0.1b
-# URL         : none
 # Licenses    : GPL
 # Depends on  : perl, perl-www-curl
-# Date        : Sat Mar 31 19:32:44 CEST 2012
-# Updated     : Tue Jun 26 14:51:52 CEST 2012
 # Description : search for updates and write package names (and 
 #               version numbers) in $XDG_CACHE_HOME/sah
 
@@ -19,7 +16,7 @@ use version; # version comparing
 # 1}}}
 
 # config {{{1
-our $FILE = $ENV{XDG_CACHE_HOME} . "/sah";
+our $FILE = (exists($ENV{XDG_CACHE_HOME}) ? $ENV{XDG_CACHE_HOME} : $ENV{HOME} . "/.cache") . "/sah";
 our $TIMEOUT = 10;
     # proxy settings {{{2 # XXX: untested
     our $USEPROXY = 0; # 0 = false, 1 = true
