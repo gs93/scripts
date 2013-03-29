@@ -17,6 +17,8 @@ my $targetFolder = "/mnt/clip/MUSIC";
 my $dryrun = 0;
 my $verbose = 0;
 
+# TODO: trap, see http://www.perlmonks.org/?node_id=93004
+
 sub parsePlaylist { # {{{1
     my @files;
     open PLAYLIST, "$_[0]" or die "Can't open $_[0]: $!\n";
@@ -125,11 +127,7 @@ sub main { # {{{1
                 system("cp -u  --preserve=mode,timestamps -- \"$musicFile\" \"$targetFolder/$trgName\""); # no perl function for this -.-
                 print M3U "$trgName\n";
             }
-
-            if ($verbose >= 2) {
-                print "copy \"$musicHome/$_\" to \"$targetFolder/$trgName\"\n";
-            }
-
+            print "copy \"$musicHome/$_\" to \"$targetFolder/$trgName\"\n" if ($verbose >= 2);
             $playlistSize += (-s $musicFile);
 
         }
