@@ -45,10 +45,12 @@ sub now_playing_handler { # {{{
     debug("now playing invoked");
     my ($conv, $cmd, $plugin, @args) = @_;
     my $sendmsg = $conv->get_im_data();
+    $sendmsg = $conv->get_chat_data() if (not defined $sendmsg);
     # XXX: mpc instead of ncmpcpp, or direct connection to mpd (http://www.perlfect.com/articles/telnet.shtml)
     # alternative: configuration window for the user
     my $msg = `ncmpcpp --now-playing '{{%t}{ by %a}{ from %b}}|{%f}{ (%l)}'`;
     chop($msg); # remove \n
+
     $sendmsg->send("/me " . $msg);
     #$sendmsg->write("", "blabla", Purple::Conversation::Flags::SYSTEM, 0); #  NO_LOG for grey text
     return Purple::Cmd::Ret::OK;
