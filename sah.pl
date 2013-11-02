@@ -2,7 +2,7 @@
 # Name        : sah (simple aur helper)
 # Version     : 0.1b
 # Licenses    : GPL
-# Depends on  : perl, perl-www-curl
+# Depends on  : perl, perl-inline, perl-www-curl
 # Description : search for updates and write package names (and 
 #               version numbers) in $XDG_CACHE_HOME/sah
 
@@ -12,7 +12,8 @@ use warnings;
 
 use WWW::Curl::Easy; # curl
 use Parse::CPAN::Meta; # json handling
-use version; # version comparing
+use Inline C => DATA =>
+                LIBS => '-lalpm';
 # 1}}}
 
 # config {{{1
@@ -72,18 +73,11 @@ if ($retcode == 0) {
         open (FILE, ">$FILE"); # open file
         my $jstruct = Parse::CPAN::Meta->load_json_string($body); # parse json
         foreach my $p (@{$jstruct->{results}}) { # iterate results
-            # compare versions {{{2
-            my $rVersion = $p->{Version}; # remote version
-            my $lVersion = $pkgs{$p->{Name}}; # local version
-            $rVersion =~ s/[-|:]/./g; # workaround for versions like
-            $lVersion =~ s/[-|:]/./g; # 1:2.1 or 3.4-1
-            $rVersion = version->new($rVersion);
-            $lVersion = version->new($lVersion);
-            if ($rVersion > $lVersion) { # compare
+            # compare versions (remote, local)
+            if (versionDiffers($p->{Version}, $pkgs{$p->{Name}})) {
                 # write updateable pkgs into file
                 print FILE $p->{Name} . ' ' . $pkgs{$p->{Name}} . ' -> ' . $p->{Version} . "\n";
             }
-            # 2}}}
         }
         close (FILE); # close file
     } else {
@@ -93,4 +87,17 @@ if ($retcode == 0) {
     print STDERR "Error: " . $curl->strerror($retcode) . " ($retcode) " . $curl->errbuf . "\n";
 }
 # 1}}}
+
+__END__
+__C__
+
+#include <alpm.h>
+
+bool versionDiffers(const char *remoteVersion, const char *localVersion)
+{
+    //  1: newVersion > oldVersion
+    //  0: newVersion = oldVersion
+    // -1: newVersion < oldVersion
+    return alpm_pkg_vercmp(remoteVersion, localVersion) != 0;
+}
 
